@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeKids Adventures! Learn Programming</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #292F36;
+            --light: #F7FFF7;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        p { font-size: 1.2rem; }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-bottom: 8px solid var(--secondary);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { color: var(--primary); font-size: 1.5rem; }
+        
+        /* Interactive Game Section */
+        .game-section {
+            background: white;
+            max-width: 840px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border: 4px dashed var(--secondary);
+        }
+        .robot-stage {
+            font-size: 3rem;
+            margin: 20px;
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px #d9534f;
+            transition: all 0.1s;
+        }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 #d9534f;
+        }
+        .log {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🚀 CodeKids Adventures! 🤖</h1>
+        <p>Learn how computers think through games, puzzles, and fun logic!</p>
+    </header>
+
+    <div class="container">
+        <div class="card" style="border-bottom-color: #FF6B6B;">
+            <h3>1. Algorithms</h3>
+            <p>An algorithm is just a recipe! It's step-by-step instructions to tell a computer what to do, like brushing your teeth or making a sandwich.</p>
+        </div>
+        <div class="card" style="border-bottom-color: #4ECDC4;">
+            <h3>2. Loops</h3>
+            <p>Why write the same thing 100 times? Loops let you repeat an action over and over again with just one command!</p>
+        </div>
+        <div class="card" style="border-bottom-color: #FFE66D;">
+            <h3>3. Conditionals</h3>
+            <p>Making choices! <em>"If"</em> it is raining, <em>then</em> wear a raincoat, <em>else</em> wear sunglasses!</p>
+        </div>
+    </div>
+
+    <!-- Interactive Mini Game -->
+    <div class="game-section">
+        <h2>🎮 Mini Game: Program the Robot!</h2>
+        <p>Help Robo reach the star ⭐ by running your instructions in order!</p>
+        <div class="robot-stage" id="stage">🤖 . . . ⭐</div>
+        <button onclick="runRobot()">Run Program ▶</button>
+        <div class="log" id="gameLog">Press 'Run Program' to start!</div>
+    </div>
+
+    <script>
+        function runRobot() {
+            const stage = document.getElementById("stage");
+            const log = document.getElementById("gameLog");
+            
+            stage.innerHTML = "🤖 ➡️ ⭐";
+            log.innerHTML = "Step 1: Move Right... Success! Robot got the star! 🎉";
+            
+            setTimeout(() => {
+                stage.innerHTML = "⭐ 🤖 🎉";
+                log.innerHTML = "Awesome job! You wrote a working algorithm!";
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
