@@ -47,7 +47,7 @@
         .card:hover { transform: translateY(-5px); }
         .card h3 { color: var(--primary); font-size: 1.5rem; }
         
-        /* Interactive Game Section */
+        /* Interactive Sections */
         .game-section {
             background: white;
             max-width: 840px;
@@ -58,11 +58,12 @@
             border: 4px dashed var(--secondary);
         }
         .robot-stage {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin: 20px;
             background: #f0f8ff;
             padding: 20px;
             border-radius: 10px;
+            letter-spacing: 15px;
         }
         button {
             background-color: var(--primary);
@@ -75,16 +76,37 @@
             font-weight: bold;
             box-shadow: 0 4px #d9534f;
             transition: all 0.1s;
+            margin: 5px;
         }
         button:active {
             transform: translateY(4px);
             box-shadow: 0 0 #d9534f;
+        }
+        .secondary-btn {
+            background-color: var(--secondary);
+            box-shadow: 0 4px #3ab0a6;
+        }
+        .secondary-btn:active {
+            box-shadow: 0 0 #3ab0a6;
         }
         .log {
             margin-top: 15px;
             font-weight: bold;
             font-size: 1.1rem;
             color: #333;
+        }
+        .score-box {
+            font-size: 2rem;
+            color: #ffaa00;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .quiz-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -98,39 +120,106 @@
     <div class="container">
         <div class="card" style="border-bottom-color: #FF6B6B;">
             <h3>1. Algorithms</h3>
-            <p>An algorithm is just a recipe! It's step-by-step instructions to tell a computer what to do, like brushing your teeth or making a sandwich.</p>
+            <p>An algorithm is just a recipe! Step-by-step instructions to tell a computer what to do, like making a sandwich.</p>
         </div>
         <div class="card" style="border-bottom-color: #4ECDC4;">
             <h3>2. Loops</h3>
-            <p>Why write the same thing 100 times? Loops let you repeat an action over and over again with just one command!</p>
+            <p>Why write code 100 times? Loops let you repeat an action over and over again with just one command!</p>
         </div>
         <div class="card" style="border-bottom-color: #FFE66D;">
-            <h3>3. Conditionals</h3>
-            <p>Making choices! <em>"If"</em> it is raining, <em>then</em> wear a raincoat, <em>else</em> wear sunglasses!</p>
+            <h3>3. Variables</h3>
+            <p>A variable is a labeled magic box that holds information, like your current game score!</p>
         </div>
     </div>
 
-    <!-- Interactive Mini Game -->
+    <!-- Feature 1: Interactive Robot Game -->
     <div class="game-section">
-        <h2>🎮 Mini Game: Program the Robot!</h2>
-        <p>Help Robo reach the star ⭐ by running your instructions in order!</p>
-        <div class="robot-stage" id="stage">🤖 . . . ⭐</div>
-        <button onclick="runRobot()">Run Program ▶</button>
-        <div class="log" id="gameLog">Press 'Run Program' to start!</div>
+        <h2>🎮 Game 1: Program the Robot!</h2>
+        <p>Click the buttons to guide Robo 🤖 to the star ⭐!</p>
+        <div class="robot-stage" id="stage">🤖 . . ⭐</div>
+        <button class="secondary-btn" onclick="moveRobot('left')">⬅️ Move Left</button>
+        <button class="secondary-btn" onclick="moveRobot('right')">Move Right ➡️</button>
+        <button onclick="resetRobot()">Reset 🔄</button>
+        <div class="log" id="robotLog">Help Robo reach the star!</div>
+    </div>
+
+    <!-- Feature 2: Variable Score Keeper -->
+    <div class="game-section" style="border-color: var(--accent);">
+        <h2>⭐ Game 2: Variable Score Keeper</h2>
+        <p>Variables store changing data. Click the button to update the <code>score</code> variable!</p>
+        <div class="score-box">Score: <span id="scoreValue">0</span></div>
+        <button style="background-color: #ffaa00; box-shadow: 0 4px #d88f00;" onclick="incrementScore()">Collect Star ⭐</button>
+        <button onclick="resetScore()">Reset Score 🔄</button>
+        <div class="log" id="scoreLog">Current variable value: score = 0</div>
+    </div>
+
+    <!-- Feature 3: Quick Quiz -->
+    <div class="game-section" style="border-color: var(--primary);">
+        <h2>🧠 Game 3: Code Quiz Challenge!</h2>
+        <p id="quizQuestion">What do you call step-by-step instructions given to a computer?</p>
+        <div class="quiz-options" id="quizOptions">
+            <button onclick="checkAnswer(false)">A loop</button>
+            <button onclick="checkAnswer(true)">An algorithm</button>
+            <button onclick="checkAnswer(false)">A variable</button>
+        </div>
+        <div class="log" id="quizLog"></div>
     </div>
 
     <script>
-        function runRobot() {
+        // Feature 1 Script
+        let robotPos = 0; // 0 = start, 1 = middle, 2 = star reached
+        function moveRobot(direction) {
             const stage = document.getElementById("stage");
-            const log = document.getElementById("gameLog");
+            const log = document.getElementById("robotLog");
             
-            stage.innerHTML = "🤖 ➡️ ⭐";
-            log.innerHTML = "Step 1: Move Right... Success! Robot got the star! 🎉";
-            
-            setTimeout(() => {
-                stage.innerHTML = "⭐ 🤖 🎉";
-                log.innerHTML = "Awesome job! You wrote a working algorithm!";
-            }, 1500);
+            if (direction === 'right' && robotPos < 2) {
+                robotPos++;
+            } else if (direction === 'left' && robotPos > 0) {
+                robotPos--;
+            }
+
+            if (robotPos === 0) {
+                stage.innerHTML = "🤖 . . ⭐";
+                log.innerHTML = "Robo is at the start.";
+            } else if (robotPos === 1) {
+                stage.innerHTML = ". 🤖 . ⭐";
+                log.innerHTML = "Getting closer! Keep going!";
+            } else if (robotPos === 2) {
+                stage.innerHTML = ". . 🤖⭐ 🎉";
+                log.innerHTML = "Awesome job! You successfully programmed Robo to reach the star! 🚀";
+            }
+        }
+
+        function resetRobot() {
+            robotPos = 0;
+            document.getElementById("stage").innerHTML = "🤖 . . ⭐";
+            document.getElementById("robotLog").innerHTML = "Reset! Guide Robo to the star.";
+        }
+
+        // Feature 2 Script
+        let score = 0;
+        function incrementScore() {
+            score++;
+            document.getElementById("scoreValue").innerText = score;
+            document.getElementById("scoreLog").innerText = `Variable updated: score = ${score}`;
+        }
+
+        function resetScore() {
+            score = 0;
+            document.getElementById("scoreValue").innerText = score;
+            document.getElementById("scoreLog").innerText = "Variable reset: score = 0";
+        }
+
+        // Feature 3 Script
+        function checkAnswer(isCorrect) {
+            const log = document.getElementById("quizLog");
+            if (isCorrect) {
+                log.innerHTML = "🎉 Correct! Step-by-step instructions are an algorithm!";
+                log.style.color = "#28a745";
+            } else {
+                log.innerHTML = "❌ Not quite! Try again!";
+                log.style.color = "#d9534f";
+            }
         }
     </script>
 
