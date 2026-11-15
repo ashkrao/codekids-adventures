@@ -153,21 +153,19 @@
         <div class="log" id="scoreLog">Current variable value: score = 0</div>
     </div>
 
-    <!-- Feature 3: Quick Quiz -->
+    <!-- Feature 3: Expanded Multi-Question Quiz -->
     <div class="game-section" style="border-color: var(--primary);">
         <h2>🧠 Game 3: Code Quiz Challenge!</h2>
-        <p id="quizQuestion">What do you call step-by-step instructions given to a computer?</p>
-        <div class="quiz-options" id="quizOptions">
-            <button onclick="checkAnswer(false)">A loop</button>
-            <button onclick="checkAnswer(true)">An algorithm</button>
-            <button onclick="checkAnswer(false)">A variable</button>
+        <div id="quizContainer">
+            <p id="quizQuestion">Loading question...</p>
+            <div class="quiz-options" id="quizOptions"></div>
         </div>
         <div class="log" id="quizLog"></div>
     </div>
 
     <script>
         // Feature 1 Script
-        let robotPos = 0; // 0 = start, 1 = middle, 2 = star reached
+        let robotPos = 0; 
         function moveRobot(direction) {
             const stage = document.getElementById("stage");
             const log = document.getElementById("robotLog");
@@ -210,17 +208,82 @@
             document.getElementById("scoreLog").innerText = "Variable reset: score = 0";
         }
 
-        // Feature 3 Script
-        function checkAnswer(isCorrect) {
+        // Feature 3 Script (Multi-Question Quiz)
+        const quizData = [
+            {
+                question: "What do you call step-by-step instructions given to a computer?",
+                options: [
+                    { text: "A loop", correct: false },
+                    { text: "An algorithm", correct: true },
+                    { text: "A variable", correct: false }
+                ]
+            },
+            {
+                question: "If you want a character to jump 10 times without writing the jump code 10 times, what should you use?",
+                options: [
+                    { text: "A loop", correct: true },
+                    { text: "An algorithm", correct: false },
+                    { text: "A mouse", correct: false }
+                ]
+            },
+            {
+                question: "What acts like a labeled magic box that holds changing info like points or player names?",
+                options: [
+                    { text: "A button", correct: false },
+                    { text: "A variable", correct: true },
+                    { text: "A screen", correct: false }
+                ]
+            },
+            {
+                question: "What is it called when you find and fix a mistake or bug in your code?",
+                options: [
+                    { text: "Debugging", correct: true },
+                    { text: "Sleeping", correct: false },
+                    { text: "Printing", correct: false }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuizQuestion() {
+            const q = quizData[currentQuestionIndex];
+            document.getElementById("quizQuestion").innerText = `Question ${currentQuestionIndex + 1}: ${q.question}`;
+            const optionsContainer = document.getElementById("quizOptions");
+            optionsContainer.innerHTML = "";
+            document.getElementById("quizLog").innerText = "";
+
+            q.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.innerText = opt.text;
+                btn.onclick = () => checkQuizAnswer(opt.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(isCorrect) {
             const log = document.getElementById("quizLog");
             if (isCorrect) {
-                log.innerHTML = "🎉 Correct! Step-by-step instructions are an algorithm!";
+                log.innerHTML = "🎉 Correct! Great job!";
                 log.style.color = "#28a745";
+                currentQuestionIndex++;
+                
+                setTimeout(() => {
+                    if (currentQuestionIndex < quizData.length) {
+                        loadQuizQuestion();
+                    } else {
+                        document.getElementById("quizContainer").innerHTML = "<h3>🏆 You finished all the quiz questions! Awesome coding skills! 🌟</h3>";
+                        document.getElementById("quizLog").innerHTML = "";
+                    }
+                }, 1500);
             } else {
                 log.innerHTML = "❌ Not quite! Try again!";
                 log.style.color = "#d9534f";
             }
         }
+
+        // Initialize quiz on load
+        loadQuizQuestion();
     </script>
 
 </body>
